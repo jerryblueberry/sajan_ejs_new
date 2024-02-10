@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products</title>
+    <style>
+      /* Define the grid layout */
+      .product-grid {
+        display: grid;
+        margin: 20px;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(200px, 1fr)
+        ); /* Automatically adjust column width */
+        grid-gap: 20px; /* Gap between grid items */
+        list-style: none; /* Remove default list styles */
+        padding: 0; /* Remove default padding */
+      }
+
+      /* Style each product item */
+      .product-item {
+        border: 1px solid #ccc; /* Add border */
+        padding: 10px; /* Add padding */
+      }
+
+      /* Style product image */
+      .product-image {
+        max-width: 100%;
+
+        /* Ensure images don't exceed container width */
+        height: 120px; /* Maintain aspect ratio */
+      }
+      .anchor_tag {
+        text-decoration: none;
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('components/navbar') %>
+    <!-- <p><%= userId %></p> -->
+    <ul class="product-grid">
+      <% products.forEach(product => { %>
+      <a class="anchor_tag" href="/products/detail/<%= product._id %>">
+        <li class="product-item">
+          <h2><%= product.title %></h2>
+          <p>Description: <%= product.description %></p>
+          <p>Price: $<%= product.price %></p>
+
+          <!--  in product page dipslay only one image and in detail page we can show the array og image -->
+          <img class="product-image" src="<%= product.image[0] %>" />
+        </li>
+      </a>
+      <% }); %>
+    </ul>
+    <script>
+      // You can add JavaScript code here if needed
+    </script>
+  </body>
+</html>

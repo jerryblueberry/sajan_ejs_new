@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Your head content here -->
+    <title>Product Detail</title>
+  </head>
+  <body>
+    <h1>Product Detail</h1>
+    <p><%= userId %></p>
+
+    <div id="product-details">
+      <h2><%= product.title %></h2>
+      <h2><%= product._id %></h2>
+      <p>Description: <%= product.description %></p>
+      <p>Price: $<%= product.price %></p>
+
+      <% if (product.image && product.image.length > 0) { %>
+      <div>
+        <% product.image.forEach(imageUrl => { %>
+
+        <img
+          class="product-image"
+          src="/files/<%= imageUrl.split('\\').pop() %>"
+          alt="<%= product.title %>"
+        />
+        <% }); %>
+      </div>
+      <% } %>
+
+      <!--  new code with post in form -->
+      <!-- <form action="/carts/add-cart" method="post">
+        <input type="hidden" value="<%= userId%>" name="userId" />
+        <input type="hidden" value="<%= product._id%>" name="product" />
+        <input type="hidden" value="1" name="quantity" />
+        <input type="hidden" value="<%= product.price%>" name="price" />
+        <button type="submit">Add to Cart</button>
+      </form> -->
+
+      <button id="cart_button" class="btn_cart">Add to Cart</button>
+    </div>
+
+    <!-- Your JavaScript code here -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const addToCartButton = document.querySelector('.btn_cart');
+        addToCartButton.addEventListener('click', async () => {
+          try {
+            const productId = parseInt('<%= product._id %>');
+            const userId = '<%= userId %>';
+            const price = '<%= product.price %>';
+            const quantity = 1; // Set the quantity to 1 or adjust as needed
+
+            const response = await fetch('/carts/add-cart', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                product: productId,
+                quantity: quantity, // Include the quantity in the request body
+                price: parseInt(price),
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Error adding product to cart');
+            }
+
+            const cartData = await response.json();
+            alert('Product added to cart successfully!');
+            console.log(cartData); // Log the cart data to the console (optional)
+          } catch (error) {
+            console.error('Error adding product to cart:', error.message);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
